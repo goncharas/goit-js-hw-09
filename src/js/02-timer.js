@@ -4,6 +4,7 @@ import Notiflix from 'notiflix';
 
 const btnStart = document.querySelector('button');
 const nowTime = Date.now();
+let timer;
 let dateChoose = 0
 const spanTime = document.querySelectorAll('.value');
 btnStart.disabled = true;
@@ -25,18 +26,22 @@ const fp = flatpickr('#datetime-picker', {
 });
 
 btnStart.addEventListener('click', () => {
-  const timer = setInterval(() => {
-    let timeOver = dateChoose - Date.now();
-    if (dateChoose < Date.now()) {
-      Notiflix.Notify.failure('!!!SALE FINISHED !!!');
-      return clearInterval(timer);
-    };
-    const { days, hours, minutes, seconds } = convertMs(timeOver);
-    spanTime[0].textContent = `${days}`;
-    spanTime[1].textContent = `${hours}`;
-    spanTime[2].textContent = `${minutes}`;
-    spanTime[3].textContent = `${seconds}`;
-  }, 1000);
+  if (timer == undefined) {
+      timer = setInterval(() => {
+        let timeOver = dateChoose - Date.now();
+        if (dateChoose < Date.now()) {
+          Notiflix.Notify.failure('!!!SALE FINISHED !!!');
+          clearInterval(timer);
+          timer = undefined;
+          return;
+        }
+        const { days, hours, minutes, seconds } = convertMs(timeOver);
+        spanTime[0].textContent = `${days}`;
+        spanTime[1].textContent = `${hours}`;
+        spanTime[2].textContent = `${minutes}`;
+        spanTime[3].textContent = `${seconds}`;
+      }, 1000);
+  };
 });
 
 function pad(value) {
