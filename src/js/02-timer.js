@@ -19,6 +19,7 @@ const fp = flatpickr('#datetime-picker', {
     dateChoose = fp.selectedDates[0].getTime();
     if (dateChoose < nowTime) {
       Notiflix.Notify.failure("!!! PLEASE CHOOSE A DATE IN FUTURE !!!")
+      btnStart.disabled = true;
       return;
     };
     btnStart.disabled = false;
@@ -27,10 +28,11 @@ const fp = flatpickr('#datetime-picker', {
 
 btnStart.addEventListener('click', () => {
   if (timer == undefined) {
-      timer = setInterval(() => {
+    timer = setInterval(() => {
+        btnStart.disabled = true;
         let timeOver = dateChoose - Date.now();
         if (dateChoose < Date.now()) {
-          Notiflix.Notify.failure('!!!SALE FINISHED !!!');
+          Notiflix.Notify.failure('!!! SALE FINISHED !!!');
           clearInterval(timer);
           timer = undefined;
           return;
